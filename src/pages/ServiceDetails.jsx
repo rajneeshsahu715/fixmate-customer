@@ -161,6 +161,7 @@ const ServiceDetails = () => {
   // =========================
   // LOADING STATE
   // =========================
+
   if (loading) {
     return (
       <section className="min-h-[70vh] bg-background px-5 py-20 sm:px-6 lg:px-8">
@@ -187,6 +188,7 @@ const ServiceDetails = () => {
   // =========================
   // ERROR / NOT FOUND
   // =========================
+
   if (error || !service) {
     return (
       <section className="min-h-[70vh] bg-background px-5 py-20 sm:px-6 lg:px-8">
@@ -210,6 +212,7 @@ const ServiceDetails = () => {
                 className="inline-flex items-center justify-center gap-2 rounded-xl bg-primary-900 px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-primary-700"
               >
                 <ArrowLeft size={17} />
+
                 <span className="text-white">
                   Back to Services
                 </span>
@@ -226,6 +229,7 @@ const ServiceDetails = () => {
       {/* =========================
           TOP BAR
       ========================= */}
+
       <div className="border-b border-slate-200 bg-white">
         <div className="mx-auto max-w-7xl px-5 py-5 sm:px-6 lg:px-8">
           <Link
@@ -233,6 +237,7 @@ const ServiceDetails = () => {
             className="inline-flex items-center gap-2 text-sm font-semibold text-text-secondary transition-colors hover:text-primary-600"
           >
             <ArrowLeft size={17} />
+
             Back to Services
           </Link>
         </div>
@@ -242,8 +247,10 @@ const ServiceDetails = () => {
         {/* =========================
             MAIN HEADER
         ========================= */}
+
         <div className="grid gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-start">
           {/* IMAGE */}
+
           <div className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
             <div className="relative flex aspect-[4/3] items-center justify-center bg-primary-50">
               {service.imageUrl ? (
@@ -280,6 +287,7 @@ const ServiceDetails = () => {
           </div>
 
           {/* DETAILS */}
+
           <div>
             <div className="flex flex-wrap items-center gap-2">
               <span className="rounded-full bg-primary-50 px-3 py-1.5 text-xs font-bold text-primary-700">
@@ -301,6 +309,7 @@ const ServiceDetails = () => {
             </p>
 
             {/* STATS */}
+
             <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-3">
               <div className="flex items-center gap-1.5">
                 <Star
@@ -335,10 +344,10 @@ const ServiceDetails = () => {
             </div>
 
             {/* PRICE */}
+
             <div className="mt-7 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
               <p className="text-sm text-text-muted">
-                {service.pricingType ===
-                "hourly"
+                {service.pricingType === "hourly"
                   ? "Starting hourly"
                   : "Starting from"}
               </p>
@@ -349,9 +358,7 @@ const ServiceDetails = () => {
                     ₹
                     {Number(
                       service.basePrice || 0
-                    ).toLocaleString(
-                      "en-IN"
-                    )}
+                    ).toLocaleString("en-IN")}
                   </span>
 
                   <span className="ml-2 text-sm text-text-muted">
@@ -373,6 +380,7 @@ const ServiceDetails = () => {
             </div>
 
             {/* CTA */}
+
             <div className="mt-6 flex flex-col gap-3 sm:flex-row">
               <Link
                 to={`/services/${service._id}/book`}
@@ -388,9 +396,10 @@ const ServiceDetails = () => {
                 />
               </Link>
 
+              {/* FIXED: service filter instead of text search */}
               <Link
-                to={`/professionals?search=${encodeURIComponent(
-                  service.name
+                to={`/professionals?service=${encodeURIComponent(
+                  service.slug || service.name
                 )}`}
                 className="inline-flex items-center justify-center rounded-xl border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-text-primary transition-colors hover:bg-slate-50"
               >
@@ -403,6 +412,7 @@ const ServiceDetails = () => {
         {/* =========================
             PROVIDERS
         ========================= */}
+
         <div className="mt-14">
           <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
             <div>
@@ -421,9 +431,10 @@ const ServiceDetails = () => {
               </p>
             </div>
 
+            {/* FIXED: service filter instead of text search */}
             <Link
-              to={`/professionals?search=${encodeURIComponent(
-                service.name
+              to={`/professionals?service=${encodeURIComponent(
+                service.slug || service.name
               )}`}
               className="inline-flex items-center gap-2 text-sm font-bold text-primary-600 transition-colors hover:text-accent-600"
             >
@@ -455,8 +466,9 @@ const ServiceDetails = () => {
             </div>
           ) : (
             <div className="mt-7 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-              {providers.slice(0, 6).map(
-                (provider) => (
+              {providers
+                .slice(0, 6)
+                .map((provider) => (
                   <Card
                     key={provider._id}
                     hover
@@ -466,9 +478,7 @@ const ServiceDetails = () => {
                       <div className="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-primary-50">
                         {provider.profileImage ? (
                           <img
-                            src={
-                              provider.profileImage
-                            }
+                            src={provider.profileImage}
                             alt={getProviderName(
                               provider
                             )}
@@ -504,6 +514,7 @@ const ServiceDetails = () => {
                               className="text-accent-500"
                               fill="currentColor"
                             />
+
                             {Number(
                               provider.rating
                                 ?.average || 0
@@ -549,8 +560,7 @@ const ServiceDetails = () => {
                       </span>
                     </div>
                   </Card>
-                )
-              )}
+                ))}
             </div>
           )}
         </div>
@@ -558,6 +568,7 @@ const ServiceDetails = () => {
         {/* =========================
             INCLUDED / EXCLUDED
         ========================= */}
+
         <div className="mt-14 grid gap-6 lg:grid-cols-2">
           <Card padding="lg">
             <h2 className="text-xl font-bold text-text-primary">
@@ -565,23 +576,21 @@ const ServiceDetails = () => {
             </h2>
 
             <div className="mt-6 space-y-4">
-              {included.map(
-                (item, index) => (
-                  <div
-                    key={`${item}-${index}`}
-                    className="flex items-start gap-3"
-                  >
-                    <CheckCircle2
-                      size={19}
-                      className="mt-0.5 shrink-0 text-success"
-                    />
+              {included.map((item, index) => (
+                <div
+                  key={`${item}-${index}`}
+                  className="flex items-start gap-3"
+                >
+                  <CheckCircle2
+                    size={19}
+                    className="mt-0.5 shrink-0 text-success"
+                  />
 
-                    <span className="text-sm leading-6 text-text-secondary">
-                      {item}
-                    </span>
-                  </div>
-                )
-              )}
+                  <span className="text-sm leading-6 text-text-secondary">
+                    {item}
+                  </span>
+                </div>
+              ))}
             </div>
           </Card>
 
@@ -591,22 +600,20 @@ const ServiceDetails = () => {
             </h2>
 
             <div className="mt-6 space-y-4">
-              {excluded.map(
-                (item, index) => (
-                  <div
-                    key={`${item}-${index}`}
-                    className="flex items-start gap-3"
-                  >
-                    <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-slate-100 text-xs font-bold text-text-muted">
-                      —
-                    </span>
+              {excluded.map((item, index) => (
+                <div
+                  key={`${item}-${index}`}
+                  className="flex items-start gap-3"
+                >
+                  <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-slate-100 text-xs font-bold text-text-muted">
+                    —
+                  </span>
 
-                    <span className="text-sm leading-6 text-text-secondary">
-                      {item}
-                    </span>
-                  </div>
-                )
-              )}
+                  <span className="text-sm leading-6 text-text-secondary">
+                    {item}
+                  </span>
+                </div>
+              ))}
             </div>
           </Card>
         </div>
@@ -614,6 +621,7 @@ const ServiceDetails = () => {
         {/* =========================
             CUSTOMER FEEDBACK
         ========================= */}
+
         <div className="mt-14">
           <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
             <div>
@@ -689,6 +697,7 @@ const ServiceDetails = () => {
         {/* =========================
             FAQ
         ========================= */}
+
         <div className="mt-14 max-w-4xl">
           <p className="text-sm font-bold uppercase tracking-[0.14em] text-accent-600">
             FAQ
@@ -719,6 +728,7 @@ const ServiceDetails = () => {
         {/* =========================
             BOTTOM CTA
         ========================= */}
+
         <div className="mt-14 rounded-3xl bg-primary-900 p-7 sm:p-10">
           <div className="flex flex-col justify-between gap-6 sm:flex-row sm:items-center">
             <div>
