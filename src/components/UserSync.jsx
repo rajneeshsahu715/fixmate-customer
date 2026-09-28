@@ -39,6 +39,7 @@ const UserSync = () => {
         console.log(
           "FixMate Customer: user is not signed in. Skipping sync."
         );
+
         return;
       }
 
@@ -54,6 +55,51 @@ const UserSync = () => {
             `FixMate Customer token attempt ${attempt}:`,
             Boolean(token)
           );
+
+          // =====================================================
+          // TEMPORARY JWT DIAGNOSTIC
+          // =====================================================
+          //
+          // We DO NOT print the complete JWT.
+          // Only safe claims are displayed for debugging.
+          //
+          // =====================================================
+
+          if (token) {
+            try {
+              const tokenParts = token.split(".");
+
+              if (tokenParts.length === 3) {
+                const payload = JSON.parse(
+                  atob(tokenParts[1])
+                );
+
+                console.log(
+                  "FixMate Customer JWT diagnostics:",
+                  {
+                    issuer: payload.iss || null,
+                    subjectPresent: Boolean(payload.sub),
+                    authorizedParty:
+                      payload.azp || null,
+                    tokenType:
+                      payload.typ || null,
+                  }
+                );
+              } else {
+                console.error(
+                  "FixMate Customer: received token does not look like a JWT."
+                );
+              }
+            } catch (decodeError) {
+              console.error(
+                "FixMate Customer JWT decode failed:",
+                decodeError?.message ||
+                  decodeError
+              );
+            }
+          }
+
+          // =====================================================
 
           if (token || cancelled) {
             break;
@@ -83,18 +129,28 @@ const UserSync = () => {
           `${API_BASE_URL}/api/users/sync`,
           {
             email,
-            firstName: user.firstName || "",
-            lastName: user.lastName || "",
+
+            firstName:
+              user.firstName || "",
+
+            lastName:
+              user.lastName || "",
+
             phone:
               user.primaryPhoneNumber?.phoneNumber ||
               "",
-            avatar: user.imageUrl || "",
+
+            avatar:
+              user.imageUrl || "",
           },
           {
             headers: {
               "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
+
+              Authorization:
+                `Bearer ${token}`,
             },
+
             withCredentials: true,
           }
         );
